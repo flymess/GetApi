@@ -1,46 +1,39 @@
 /**
  * Created by tao on 2017/7/31.
  */
-const sdk = {
-  model: {
-    '主页': 'arr0',
-	'作业考试': 'arr1'
-  },
-  list: {
-	'arr0': [
+const config = [
+  {
+    name: '主页',
+	list: [
 	  {
-		'name': '今日任务',
-		'url': 'getRement',
-		'method': 'GET',
-		'query': ['ss', 'ff']
+		name: '今日任务',
+		api: 'getRement',
+		query: ['ss','ff'],
+		body: [],
+		method: 'GET'
 	  },
 	  {
-		'name': '个人画像',
-		'url': 'getImage',
-		'method': 'POST',
-		'query': ['age', 'name']
-	  }
-	],
-	'arr1': [
-	  {
-		'name': '待完成',
-		'url': 'waitOK',
-		'method': 'GET',
-		'query': ['token', 'name']
-	  },
-	  {
-		'name': '已完成',
-		'url': 'OK',
-		'method': 'GET',
-		'query': ['name', 'type']
-	  },
-	  {
-		'name': '学情报告',
-		'url': 'detail',
-		'method': 'POST',
-		'query': []
+	    name: '个人画像',
+		api: 'getImage',
+		query: ['age','name'],
+		body: ['pass'],
+		method: 'POST'
 	  }
 	]
   },
-  url: 'http://baidu.com/api/'
-}
+  {
+    name: '作业考试',
+	list: [
+	  {
+	    name: '待完成',
+		api: 'waitOK/{id}/comit/{age}',
+		method: 'GET',
+		body:[],
+		params: ['id','age'],
+		query: ['age']
+	  }
+	]
+  }
+]
+
+const url = 'http://baidu/com/api'

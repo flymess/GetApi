@@ -3,143 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>接口调试</title>
-    <style>
-        .content {
-            padding: 10px 15px;
-            border: 1px solid #ccc;
-            color: #333;
-            background-color: #f8f8f8;
-            border-radius: 3px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/jquery.jsonview.css"/>
+    <link rel="stylesheet" href="./css/index.css"/>
 </head>
 <body>
-<div class="content" style="border: 1px solid #999;width: 1000px;margin: 0 auto;">
-    <label for="">模块:</label> <select name="" id="model"></select><br>
-    <label for="">接口列表:</label> <select name="" id="list"></select><br>
-    <label for="">参数列表:</label><br>
+<div class="content" style="">
+    <div><label class="title" for="">模块:</label><select name="" id="model"></select><br></div>
+    <div><label class="title" for="">接口列表:</label><select name="" id="list"></select><br></div>
+    <div><label class="title" for="">参数列表:</label><br></div>
     <div id="query">
 
     </div>
-    <div id="bodySet">
-        <label for="">body:</label><br>
-        <textarea id="body" style="height: 300px;width: 500px;"></textarea>
-    </div>
-    <div>
+    <div style="text-align: center">
         <button id="send">发送</button>
     </div>
 </div>
+
+<div id="json"></div>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="./js/jquery.jsonview.js"></script>
+<script src="//unpkg.com/axios/dist/axios.min.js"></script>
 <script src="./config.js"></script>
-<script>
-  var list = document.getElementById('list')
-  var model = document.getElementById('model')
-  var query = document.getElementById('query')
-
-  function Initialization() {
-	for (var key in sdk.model) {
-	  var Node = document.createElement('option')
-	  Node.setAttribute('value', sdk.model[key])
-	  Node.innerHTML = key
-	  model.appendChild(Node)
-	}
-
-    setList()
-	setQueryList()
-  }
-
-  function setQueryList() {
-    var index = list.selectedIndex
-    var key = list.options[index].getAttribute('query')
-
-	if (list.options[index].getAttribute('method') == "GET"){
-	  document.getElementById('bodySet').style.display = 'none'
-	}else {
-	  document.getElementById('bodySet').style.display = 'block'
-	}
-
-    if (key.length == 0){
-	  query.innerHTML = null;
-	  return
-    }
-
-    var queryList = key.split(',');
-	query.innerHTML = null;
-
-    [].map.call(queryList, (item, index) => {
-      var _label = document.createElement('label')
-      var _input = document.createElement('input')
-      _label.innerHTML = item + ':'
-      _input.setAttribute('name', item)
-      _input.setAttribute('class', 'query')
-      query.appendChild(_label)
-      query.appendChild(_input)
-      query.appendChild(document.createElement('br'))
-    })
-
-  }
-
-  function setList() {
-    var index = model.selectedIndex
-    var key = model.options[index].value;
-	list.innerHTML = null;
-    [].map.call(sdk.list[key], (item, index) => {
-      var Node = document.createElement('option')
-      Node.setAttribute('value', item.url)
-      Node.setAttribute('method', item.method)
-      Node.setAttribute('query', item.query)
-      Node.innerHTML = item.name
-      list.appendChild(Node)
-    })
-	setQueryList()
-  }
-
-  function SendApi() {
-	var ButtonClick = document.getElementById('send')
-
-	ButtonClick.addEventListener('click', function (e) {
-	  var index = list.selectedIndex
-	  var url = list.options[index].value
-      var methods = list.options[index].getAttribute('method')
-	  var queryList = document.querySelectorAll('.query')
-	  var body = document.getElementById('body')
-      var SendUrl = sdk.url + url + '?'
-	  var json = [];
-
-	  [].map.call(queryList, (item, index) => {
-		json.push({
-		  name: item.getAttribute('name'),
-		  content: item.value
-		})
-        SendUrl += `${item.getAttribute('name')}=${item.value}&`
-	  })
-
-      if (methods == "GET"){
-		fetch(SendUrl,{
-		  method: methods,
-		  headers: {
-			"Content-Type": "application/json"
-		  }
-		})
-      }else {
-		fetch(SendUrl,{
-		  method: methods,
-		  body: JSON.stringify(body.value),
-		  headers: {
-			"Content-Type": "application/json"
-		  }
-		})
-      }
-
-	})
-  }
-
-  window.onload = function () {
-	Initialization()
-	SendApi()
-	model.addEventListener('change', setList)
-    list.addEventListener('change', setQueryList)
-  }
-</script>
+<script src="./js/index.js"></script>
 </body>
 </html>
